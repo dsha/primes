@@ -1,0 +1,10 @@
+logging:
+    level: INFO
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 9020
+  adminConnectors:
+    - type: http
+      port: 9021
