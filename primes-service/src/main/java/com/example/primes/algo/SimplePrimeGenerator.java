@@ -2,7 +2,7 @@ package com.example.primes.algo;
 
 import java.util.stream.IntStream;
 
-public class SimplePrimeGenerator implements PrimeGenerator {
+class SimplePrimeGenerator implements PrimeGenerator {
 
     private static boolean isPrime(final int number) {
         return IntStream

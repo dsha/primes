@@ -43,6 +43,17 @@ public class PrimesResourceTest {
     }
 
     @Test
+    public void testOnePrimeWithSieve() {
+        final Client client = buildClient();
+        final Integer firstPrime = getPrimesWebTarget(client)
+            .queryParam("index", 11)
+            .queryParam("algo", "incremental_sieve")
+            .request()
+            .get(Integer.class);
+        assertThat(firstPrime, is(31));
+    }
+
+    @Test
     public void testEleventhPrime() {
         final Client client = buildClient();
         final Integer firstPrime = getPrimesWebTarget(client)

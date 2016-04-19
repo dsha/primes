@@ -1,12 +1,14 @@
 package com.example.primes.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.example.primes.algo.PrimeGenerationAlgorithm;
 import com.example.primes.algo.PrimeGenerator;
-import com.example.primes.algo.SimplePrimeGenerator;
+import com.example.primes.algo.PrimeGeneratorFactory;
 import io.dropwizard.jersey.caching.CacheControl;
 import io.dropwizard.jersey.params.IntParam;
 
 import javax.validation.constraints.Min;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -23,8 +25,9 @@ public class PrimesResource {
     @GET
     @Timed
     @CacheControl(maxAge = 365, maxAgeUnit = TimeUnit.DAYS)
-    public int getPrime(@QueryParam("index") @Min(1) IntParam index) {
-        final PrimeGenerator primeGenerator = new SimplePrimeGenerator();
+    public int getPrime(@QueryParam("index") @Min(1) IntParam index,
+                        @QueryParam("algo") @DefaultValue("simple") PrimeGenerationAlgorithm algorithm) {
+        final PrimeGenerator primeGenerator = PrimeGeneratorFactory.getGenerator(algorithm);
         return primeGenerator
             .primes()
             .skip(index.get() - 1)
