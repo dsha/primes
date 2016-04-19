@@ -2,6 +2,6 @@ package com.example.primes.algo;
 
 import rx.Observable;
 
-public interface PrimeFinder {
+public interface PrimeGenerator {
     Observable<Integer> primes();
 }

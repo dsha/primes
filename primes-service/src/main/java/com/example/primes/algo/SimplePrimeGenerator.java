@@ -4,7 +4,7 @@ import rx.Observable;
 
 import java.util.Iterator;
 
-public class SimplePrimeFinder implements PrimeFinder {
+public class SimplePrimeGenerator implements PrimeGenerator {
     private static class AllPositiveIntegersIterator implements Iterator<Integer> {
         private int current = 2;
 
@@ -34,6 +34,6 @@ public class SimplePrimeFinder implements PrimeFinder {
     public Observable<Integer> primes() {
         return Observable
             .from(AllPositiveIntegersIterator::new)
-            .filter(SimplePrimeFinder::isPrime);
+            .filter(SimplePrimeGenerator::isPrime);
     }
 }

@@ -1,8 +1,8 @@
 package com.example.primes.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import com.example.primes.algo.PrimeFinder;
-import com.example.primes.algo.SimplePrimeFinder;
+import com.example.primes.algo.PrimeGenerator;
+import com.example.primes.algo.SimplePrimeGenerator;
 import io.dropwizard.jersey.caching.CacheControl;
 import io.dropwizard.jersey.params.IntParam;
 import org.slf4j.Logger;
@@ -28,8 +28,8 @@ public class PrimesResource {
     @Timed
     @CacheControl(maxAge = 365, maxAgeUnit = TimeUnit.DAYS)
     public int getPrime(@QueryParam("index") @Min(1) IntParam index) {
-        final PrimeFinder primeFinder = new SimplePrimeFinder();
-        return primeFinder
+        final PrimeGenerator primeGenerator = new SimplePrimeGenerator();
+        return primeGenerator
             .primes()
             .skip(index.get() - 1)
             .toBlocking()
