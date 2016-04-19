@@ -28,15 +28,14 @@ public class PrimesResourceTest {
         return ClientBuilder.newClient();
     }
 
-    private static WebTarget getPrimesWebTarget(Client client) {
-        return client.target(URI.create("http://localhost:" + primes.getLocalPort() + "/primes"));
+    private static WebTarget getPrimesWebTarget(Client client, int index) {
+        return client.target(URI.create("http://localhost:" + primes.getLocalPort() + "/primes/" + index));
     }
 
     @Test
     public void testOnePrime() {
         final Client client = buildClient();
-        final Integer firstPrime = getPrimesWebTarget(client)
-            .queryParam("index", 1)
+        final Integer firstPrime = getPrimesWebTarget(client, 1)
             .request()
             .get(Integer.class);
         assertThat(firstPrime, is(2));
@@ -45,8 +44,7 @@ public class PrimesResourceTest {
     @Test
     public void testOnePrimeWithSieve() {
         final Client client = buildClient();
-        final Integer firstPrime = getPrimesWebTarget(client)
-            .queryParam("index", 11)
+        final Integer firstPrime = getPrimesWebTarget(client, 11)
             .queryParam("algo", "incremental_sieve")
             .request()
             .get(Integer.class);
@@ -56,8 +54,7 @@ public class PrimesResourceTest {
     @Test
     public void testEleventhPrime() {
         final Client client = buildClient();
-        final Integer firstPrime = getPrimesWebTarget(client)
-            .queryParam("index", 11)
+        final Integer firstPrime = getPrimesWebTarget(client, 11)
             .request()
             .get(Integer.class);
         assertThat(firstPrime, is(31));
@@ -66,8 +63,7 @@ public class PrimesResourceTest {
     @Test(expected = BadRequestException.class)
     public void testNegativeIndex() {
         final Client client = buildClient();
-        getPrimesWebTarget(client)
-            .queryParam("index", -1)
+        getPrimesWebTarget(client, -1)
             .request()
             .get(Integer.class);
     }
@@ -75,17 +71,7 @@ public class PrimesResourceTest {
     @Test(expected = BadRequestException.class)
     public void testZeroIndex() {
         final Client client = buildClient();
-        getPrimesWebTarget(client)
-            .queryParam("index", 0)
-            .request()
-            .get(Integer.class);
-    }
-
-    @Test(expected = BadRequestException.class)
-    public void testNaNIndex() {
-        final Client client = buildClient();
-        getPrimesWebTarget(client)
-            .queryParam("index", "not-a-number")
+        getPrimesWebTarget(client, 0)
             .request()
             .get(Integer.class);
     }
