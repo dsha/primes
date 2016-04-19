@@ -12,19 +12,20 @@ import java.util.stream.Stream;
 // https://www.cs.hmc.edu/~oneill/papers/Sieve-JFP.pdf
 class IncrementalSievePrimeGenerator implements PrimeGenerator {
     private static class SieveState {
-        private final Multimap<Integer, Integer> multipleToPrimes;
-        private final int current;
+        private final Multimap<Long, Long> multipleToPrimes;
+        private final long current;
         private final boolean isCurrentPrime;
 
-        private SieveState(Multimap<Integer, Integer> multipleToPrimes, int current) {
+        private SieveState(Multimap<Long, Long> multipleToPrimes, long current) {
             this.multipleToPrimes = multipleToPrimes;
             this.current = current;
 
             if (multipleToPrimes.containsKey(current)) {
-                final Collection<Integer> value = multipleToPrimes.get(current);
-                final Integer[] primeFactors = value.toArray(new Integer[value.size()]);
+                final Collection<Long> value = multipleToPrimes.get(current);
+                final Long[] primeFactors = value.toArray(new Long[value.size()]);
                 multipleToPrimes.removeAll(current);
-                for (Integer prime : primeFactors) {
+                for (final Long prime : primeFactors) {
+                    if (current + prime < current) throw new RuntimeException("overflow!");
                     multipleToPrimes.put(current + prime, prime);
                 }
                 this.isCurrentPrime = false;
@@ -42,7 +43,7 @@ class IncrementalSievePrimeGenerator implements PrimeGenerator {
             return new SieveState(multipleToPrimes, current + 1);
         }
 
-        int getCurrent() {
+        long getCurrent() {
             return current;
         }
 
@@ -57,6 +58,6 @@ class IncrementalSievePrimeGenerator implements PrimeGenerator {
         return Stream.iterate(SieveState.initialState(), SieveState::next)
             .filter(SieveState::isCurrentPrime)
             .map(SieveState::getCurrent)
-            .mapToInt(value -> value);
+            .mapToInt(value -> (int)value.longValue());
     }
 }
