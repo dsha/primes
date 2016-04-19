@@ -1,7 +1,7 @@
 package com.example.primes.algo;
 
-import rx.Observable;
+import java.util.stream.IntStream;
 
 public interface PrimeGenerator {
-    Observable<Integer> primes();
+    IntStream primes();
 }

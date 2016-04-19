@@ -5,8 +5,6 @@ import com.example.primes.algo.PrimeGenerator;
 import com.example.primes.algo.SimplePrimeGenerator;
 import io.dropwizard.jersey.caching.CacheControl;
 import io.dropwizard.jersey.params.IntParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.Min;
 import javax.ws.rs.GET;
@@ -19,8 +17,6 @@ import java.util.concurrent.TimeUnit;
 @Path("/primes")
 @Produces(MediaType.APPLICATION_JSON)
 public class PrimesResource {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PrimesResource.class);
-
     public PrimesResource() {
     }
 
@@ -32,8 +28,6 @@ public class PrimesResource {
         return primeGenerator
             .primes()
             .skip(index.get() - 1)
-            .toBlocking()
-            .toIterable()
             .iterator()
             .next();
     }
